@@ -1,0 +1,27 @@
+.group {
+    @apply flex flex-row;
+}
+
+.group-pre {
+    @apply rounded-l-lg border-r;
+}
+
+.group-post {
+    @apply rounded-r-lg border-l;
+}
+
+.group-title {
+    @apply p-1 font-bold;
+}
+
+.group-label {
+    @apply p-1 font-bold;
+}
+
+.group-text {
+    @apply p-1 flex-grow;
+}
+
+.group-input {
+    @apply flex-grow w-full px-2;
+}
