@@ -1,5 +1,5 @@
 .group {
-    @apply flex flex-row;
+    @apply flex flex-row border rounded-lg;
 }
 
 .group-pre {

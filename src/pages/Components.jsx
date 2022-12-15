@@ -7,6 +7,7 @@ export default function PageComponents() {
             <aside>
                 <Button to="button" as={Link} className="text-sm text-black" color="white">Button</Button>
                 <Button to="accordian" as={Link} className="text-sm text-black" color="white">Accordian</Button>
+                <Button to="group" as={Link} className="text-sm text-black" color="white">Group</Button>
             </aside>
             <div className="flex-grow">
                 <Outlet />

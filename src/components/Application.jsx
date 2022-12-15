@@ -7,6 +7,7 @@ import PageUid from '../pages/Uid';
 import PageComponents from '../pages/Components';
 import CompButton from '../pages/Components/Button';
 import CompAccordian from '../pages/Components/Accordian';
+import CompGroup from '../pages/Components/Group';
 
 export default function Application() {
     return (
@@ -31,6 +32,7 @@ export default function Application() {
                         <Route index element={<CompButton />} />
                         <Route path="button" element={<CompButton />} />
                         <Route path="accordian" element={<CompAccordian />} />
+                        <Route path="group" element={<CompGroup />} />
                     </Route>
                     <Route path="*" element={<PageFourohfour />} />
                 </Routes>

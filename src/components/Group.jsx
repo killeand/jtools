@@ -1,85 +1,73 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import _ from 'lodash';
+import '../styles/Group.css';
 
-class GroupClass extends Component {
-    constructor(props, insertClass) {
-        super(props);
-
-        let { className, children, ...everythingElse } = props;
-
-        this.newClass = ((_.isNil(className))?"":className) + " " + insertClass;
-        this.newProps = everythingElse;
-        this.newChildren = children;
+function GroupColor(color) {
+    switch(color) {
+        case 'red': return 'bg-red-200 border-red-800';
+        case 'green': return 'bg-emerald-200 border-emerald-800';
+        case 'blue': return 'bg-blue-200 border-blue-800';
+        case 'gray': return 'bg-gray-200 border-gray-800';
+        case 'yellow': return 'bg-amber-200 border-amber-800';
+        case 'purple': return 'bg-purple-200 border-purple-800';
+        case 'white': return 'bg-white';
+        default: return 'bg-gray-200 border-gray-800';
     }
 }
 
-export class GroupContainer extends GroupClass {
-    constructor(props) { super(props, "group"); }
-    render() {
-        return (
-            <div className={this.newClass} {...this.newProps}>{this.newChildren}</div>
-        );
+export function GroupContainer({className, children, border, ...props}) {
+    switch(border) {
+        case 'red': border = 'border-red-800 '; break;
+        case 'green': border = 'border-emerald-800 '; break;
+        case 'blue': border = 'border-blue-800 '; break;
+        case 'gray': border = 'border-gray-800 '; break;
+        case 'yellow': border = 'border-amber-800 '; break;
+        case 'purple': border = 'border-purple-800 '; break;
+        case 'black': border = 'border-black '; break;
+        default: border = 'border-gray-800 '; break;
     }
+
+    className = "group " + border + className;
+
+    return (<div className={className} {...props}>{children}</div>);
 }
 
-export class GroupTitle extends GroupClass {
-    constructor(props) { super(props, "group-title"); }
-    render() {
-        return (
-            <div className={this.newClass} {...this.newProps}>{this.newChildren}</div>
-        );
-    }
+export function GroupTitle({className, color, children, pre, post, ...props}) {
+    color = GroupColor(color) + " ";
+    className = "group-title " + ((pre)?"group-pre ":"") +  ((post)?"group-post ":"") + color + className;
+    
+    return (<div className={className} {...props}>{children}</div>);
 }
 
-export class GroupLabel extends GroupClass {
-    constructor(props) { super(props, "group-label"); }
-    render() {
-        return (
-            <label className={this.newClass} {...this.newProps}>{this.newChildren}</label>
-        );
-    }
+export function GroupLabel({className, color, children, pre, post, ...props}) {
+    color = GroupColor(color) + " ";
+    className = "group-label " + ((pre)?"group-pre ":"") +  ((post)?"group-post ":"") + color + className;
+    
+    return (<label className={className} {...props}>{children}</label>);
 }
 
-export class GroupText extends GroupClass {
-    constructor(props) { super(props, "group-text"); }
-    render() {
-        return (
-            <div className={this.newClass} {...this.newProps}>{this.newChildren}</div>
-        );
-    }
+export function GroupText({className, children, pre, post, ...props}) {
+    className = "group-text " + ((pre)?"group-pre ":"") +  ((post)?"group-post ":"") + className;
+
+    return (<div className={className} {...props}>{children}</div>);
 }
 
-export class GroupInput extends GroupClass {
-    constructor(props) { 
-        super(props, "group-input");
-        
-        let { value, onChange, ...otherInputProps} = this.newProps;
+export function GroupInput({className, children, value, onChange, pre, post, ...props}) {
+    let [ inputValue, setInputValue ] = useState((_.isNil(value)?"":value));
+    className = "group-input " + ((pre)?"group-pre ":"") +  ((post)?"group-post ":"") + className;
 
-        this.state = { inputValue: ((!_.isNil(value))?value:"") }
-        this.newChange = onChange;
-        this.inputProps = otherInputProps;
+    function ChangeValue(e) {
+        if (!_.isNil(onChange)) onChange(e.target.value);
+        setInputValue(e.target.value);
     }
 
-    ChangeValue(e) {
-        if (!_.isNil(this.newChange))
-            this.newChange(e.target.value);
-        this.setState({inputValue:e.target.value});
-    }
-
-    render() {
-        return (
-            <input className={this.newClass} value={this.state.inputValue} onChange={this.ChangeValue.bind(this)} {...this.otherInputProps} />
-        );
-    }
+    return (<input className={className} value={inputValue} onChange={ChangeValue} {...props} />);
 }
 
-export class GroupSelect extends GroupClass {
-    constructor(props) { super(props, "group-input"); }
-    render() {
-        return (
-            <select className={this.newClass} {...this.newProps}>{this.newChildren}</select>
-        );
-    }
+export function GroupSelect({className, children, pre, post, ...props}) {
+    className = "group-input " + ((pre)?"group-pre ":"") +  ((post)?"group-post ":"") + className;
+
+    return (<select className={className} {...props}>{children}</select>);
 }
 
 export default class Group {
