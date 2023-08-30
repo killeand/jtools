@@ -1,5 +1,5 @@
 import { v1, v3, v4, v5 } from "uuid";
-import { ulid } from "ulid";
+import { ulid } from 'ulidx';
 import { useState } from 'react';
 import Button from "../components/Button";
 

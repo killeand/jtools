@@ -23,7 +23,7 @@ nav a {
 }
 
 aside {
-  @apply w-1/6 bg-slate-800 flex flex-col p-2 text-white space-y-2;
+  @apply bg-slate-800 flex flex-col p-2 text-white space-y-2;
 }
 
 h1 {
