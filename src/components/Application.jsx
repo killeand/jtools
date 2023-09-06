@@ -5,6 +5,7 @@ import PageFourohfour from '../pages/Fourohfour';
 import PageImageProc from '../pages/ImageProc';
 import PageUid from '../pages/Uid';
 import PageComponents from '../pages/Components';
+import PageProject from '../pages/ProjectFiles';
 import CompButton from '../pages/Components/Button';
 import CompAccordian from '../pages/Components/Accordian';
 import CompGroup from '../pages/Components/Group';
@@ -21,6 +22,7 @@ export default function Application() {
                     <Button to="/image" as={Link} color="white">Image Processor</Button>
                     <Button to="/uid" as={Link} color="white">UUID/ULID Gen</Button>
                     <Button to="/comp" as={Link} color="white">Components</Button>
+                    <Button to="/project" as={Link} color="white">Project Files</Button>
                 </nav>
             </header>
             <main className="flex flex-col flex-grow">
@@ -34,6 +36,7 @@ export default function Application() {
                         <Route path="accordian" element={<CompAccordian />} />
                         <Route path="group" element={<CompGroup />} />
                     </Route>
+                    <Route path="/project" element={<PageProject />}></Route>
                     <Route path="*" element={<PageFourohfour />} />
                 </Routes>
             </main>
