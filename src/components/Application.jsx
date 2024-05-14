@@ -1,49 +1,79 @@
-import { useState } from 'react';
-import { HashRouter, Routes, Route, Link } from 'react-router-dom';
-import Button from './Button';
-import PageHome from '../pages/Home';
-import PageFourohfour from '../pages/Fourohfour';
-import PageImageProc from '../pages/ImageProc';
-import PageUid from '../pages/Uid';
-import PageComponents from '../pages/Components';
-import PageProject from '../pages/ProjectFiles';
-import CompButton from '../pages/Components/Button';
-import CompAccordian from '../pages/Components/Accordian';
-import CompGroup from '../pages/Components/Group';
+import { Suspense, useState } from "react";
+import { HashRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { SiteStructure } from "./SiteStructure";
+import { Logo128 } from "@/scripts/JToolsLogo";
+import RouteFlags from "@/scripts/RouteFlags";
+import Fourohfour from "@/pages/Fourohfour";
+
+const RenderMenu = (child) => {
+    return child.map((item, index) => {
+        const f = RouteFlags.TestAll(item.flags);
+        const user = { admin: true };
+        const loggedIn = user != null && f.isAuthed;
+        const admin = user != null ? user.admin && f.isAdmin : false;
+
+        if (f.isHidden) return null;
+
+        if (f.isAlways || loggedIn || (user == null && !f.isAuthed) || admin) {
+            return (
+                <li key={`MENU-${item.path}`}>
+                    {!f.isExternal && (
+                        <Link to={item.url} className={`${item.icon ?? ""}`}>
+                            {item.name}
+                        </Link>
+                    )}
+                    {f.isExternal && (
+                        <a href={item.url} className={`${item.icon ?? ""}`}>
+                            {item.name}
+                        </a>
+                    )}
+                    {item.children && <ul>{RenderMenu(item.children)}</ul>}
+                </li>
+            );
+        }
+    });
+};
 
 export default function Application() {
-    const [showMM, setShowMM] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+
     return (
         <HashRouter>
-            <header className="flex flex-col md:flex-row bg-blue-900 text-white p-1 border-b border-black">
-                <div className="flex flex-row">
-                    <Link to="/" className="flex flex-row items-center mr-2 border border-white rounded-md px-1">
-                        <div className="bi-tools mr-2" />
-                        <div className="">jTools</div>
-                    </Link>
-                    <div className="flex-grow">&nbsp;</div>
-                    <Button className="bi-list text-black md:hidden" color="white" onClick={()=>setShowMM(!showMM)} />
-                </div>
-                <nav className={`${(showMM)?"flex":"hidden md:flex"} flex-col md:flex-row flex-grow pt-1 md:pt-0 space-y-1 md:space-x-2 md:space-y-0`}>
-                    <Button to="/image" as={Link} color="white" onClick={()=>setShowMM(false)}>Image Processor</Button>
-                    <Button to="/uid" as={Link} color="white" onClick={()=>setShowMM(false)}>UUID/ULID Gen</Button>
-                    <Button to="/comp" as={Link} color="white" onClick={()=>setShowMM(false)}>Components</Button>
-                    <Button to="/project" as={Link} color="white" onClick={()=>setShowMM(false)}>Project Files</Button>
+            <header className="flex flex-col bg-primary p-2 text-primary-content">
+                <Link to="/" className="flex flex-row items-center gap-2 no-underline">
+                    <button className="bi-list btn btn-ghost block text-2xl md:hidden" onClick={() => setShowMenu(!showMenu)} />
+                    <img alt="jTools Logo" src={Logo128} className="max-w-8 md:max-w-10" />
+                    <div className="title_1">jTools</div>
+                </Link>
+                <nav className={`${showMenu ? "flex" : "hidden md:flex"} flex-grow`}>
+                    <ul tabIndex={0} className="menu menu-vertical menu-sm m-0 w-full font-bold uppercase">
+                        {RenderMenu(SiteStructure)}
+                    </ul>
                 </nav>
+                <label className="swap swap-rotate">
+                    <input type="checkbox" className="theme-controller" value="dark" />
+                    <div className="bi-sun-fill swap-off fill-current text-2xl" />
+                    <div className="bi-moon-stars-fill swap-on fill-current text-2xl" />
+                </label>
             </header>
-            <main className="flex flex-col flex-grow">
+            <main className="flex flex-grow flex-col p-1 md:p-2">
                 <Routes>
-                    <Route path="/" element={<PageHome />} />
-                    <Route path="/image" element={<PageImageProc />} />
-                    <Route path="/uid" element={<PageUid />} />
-                    <Route path="/comp" element={<PageComponents />}>
-                        <Route index element={<CompButton />} />
-                        <Route path="button" element={<CompButton />} />
-                        <Route path="accordian" element={<CompAccordian />} />
-                        <Route path="group" element={<CompGroup />} />
-                    </Route>
-                    <Route path="/project" element={<PageProject />}></Route>
-                    <Route path="*" element={<PageFourohfour />} />
+                    {SiteStructure.map((item) => {
+                        let addIndex = RouteFlags.Has(item.flags, RouteFlags.Index) ? { index: true } : {};
+
+                        return (
+                            <Route key={`ROUTE-${item.path}`} {...addIndex} path={item.path} element={<Suspense fallback={<p>Loading...</p>}>{item.component}</Suspense>}>
+                                {item.children &&
+                                    item.children.map((subItem) => {
+                                        let addSubIndex = RouteFlags.Has(subItem.flags, RouteFlags.Index) ? { index: true } : {};
+
+                                        return <Route key={`SUBROUTE-${subItem.path}`} {...addSubIndex} path={subItem.path} element={<Suspense fallback={<p>Loading...</p>}>{subItem.component}</Suspense>} />;
+                                    })}
+                            </Route>
+                        );
+                    })}
+                    <Route path="/404" element={<Fourohfour />} />
+                    <Route path="*" element={<Navigate to="/404" />} />
                 </Routes>
             </main>
         </HashRouter>

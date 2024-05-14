@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*########## MAIN TAG CHANGES ##########*/
+
+* {
+    @apply box-border;
+}
+
+html,
+body,
+#root {
+    @apply h-fit min-h-screen w-full font-mono;
+}
+
+#root {
+    @apply flex flex-col md:flex-row;
+}
