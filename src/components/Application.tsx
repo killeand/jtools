@@ -1,3 +1,5 @@
+import Cryptog from '@/pages/Cryptog';
+import Faker from '@/pages/Faker';
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
@@ -13,6 +15,8 @@ const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactN
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
     { n: 'IDGen', u: '/idgen', p: 'idgen', c: <Uid /> },
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
+    { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
+    { n: 'Crypto', u: '/crypto', p: 'crypto', c: <Cryptog /> },
 ];
 
 export default function Application() {
@@ -56,7 +60,7 @@ export default function Application() {
                     <ThemeChanger />
                 </div>
             </header>
-            <main className='flex flex-grow flex-col p-1 md:p-2'>
+            <main className='flex flex-grow flex-col p-1 md:p-2 relative'>
                 <Routes>
                     {ProjectStructure.map((item) => (
                         <Route key={routeId + item.n} path={item.p} element={item.c} />

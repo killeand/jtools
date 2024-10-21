@@ -44,47 +44,45 @@ export default function ImageProc() {
         }
     }
 
-    function RenderImageCards() {
-        if (images.length == 0) {
-            return <p>No images yet...</p>;
-        }
-
-        return images.map((FileInfo, index) => {
-            return (
-                <div key={`fileinfo${index}`} className='card card-compact w-[16rem] h-[11rem] shadow border'>
-                    <div className='card-body'>
-                        <div className='flex flex-row flex-grow items-end justify-evenly border-b pb-2'>
-                            <div className='border'>
-                                <img src={FileInfo.url} className='max-h-[4rem] max-w-[4rem]' />
-                            </div>
-                            <div className='border'>
-                                <img src={FileInfo.url} className='max-h-[3rem] max-w-[3rem]' />
-                            </div>
-                            <div className='border'>
-                                <img src={FileInfo.url} className='max-h-[2rem] max-w-[2rem]' />
-                            </div>
-                        </div>
-                        <div className='flex flex-row self-start items-center justify-center'>Size: {FileInfo.size} bytes</div>
-                        <div className='card-actions'>
-                            <button className='btn btn-sm btn-primary text-primary-content bi-files' onClick={() => navigator.clipboard.writeText(FileInfo.url)}>
-                                Copy
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            );
-        });
-    }
-
     return (
         <>
-            <h1>Image Processor</h1>
             <p>The image processor allows you to upload an image from your computer, and it will then be converted into a Data URL String.</p>
-            <div className='flex gap-3 mb-3 flex-wrap overflow-y-auto h-[32rem]'>{RenderImageCards()}</div>
-            <div className='mb-2 flex flex-grow flex-col border-4 border-dashed justify-center items-center' onDrop={HandleFileUpload}>
-                Drag and drop files into this area!
+            <div className='flex flex-row flex-wrap gap-3 flex-grow'>
+                {images.map((FileInfo, index) => (
+                    <div key={`fileinfo${index}`} className='card card-compact w-[16rem] h-[11rem] shadow border'>
+                        <div className='card-body'>
+                            <div className='flex flex-row flex-grow items-end justify-evenly border-b pb-2'>
+                                <div className='border'>
+                                    <img src={FileInfo.url} className='max-h-[4rem] max-w-[4rem]' />
+                                </div>
+                                <div className='border'>
+                                    <img src={FileInfo.url} className='max-h-[3rem] max-w-[3rem]' />
+                                </div>
+                                <div className='border'>
+                                    <img src={FileInfo.url} className='max-h-[2rem] max-w-[2rem]' />
+                                </div>
+                            </div>
+                            <div className='flex flex-row self-start items-center justify-center'>Size: {FileInfo.size} bytes</div>
+                            <div className='card-actions'>
+                                <button className='btn btn-sm btn-primary text-primary-content bi-files' onClick={() => navigator.clipboard.writeText(FileInfo.url)}>
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
-            <input type='file' className='file-input file-input-bordered file-input-primary w-full' multiple onChange={HandleFileUpload} />
+            <div className='flex flex-col bottom-0 sticky bg-base-100/50 backdrop-blur-sm gap-2'>
+                <div className='flex h-[10rem] flex-col border-4 border-dashed justify-center items-center' onDrop={HandleFileUpload}>
+                    Drag and drop files into this area!
+                </div>
+                <div className='flex flex-row gap-2'>
+                    <input type='file' className='file-input file-input-bordered file-input-primary w-full' multiple onChange={HandleFileUpload} />
+                    <button className='btn btn-error' onClick={() => setImages([])}>
+                        CLEAR
+                    </button>
+                </div>
+            </div>
         </>
     );
 }
