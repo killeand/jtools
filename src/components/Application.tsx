@@ -1,6 +1,8 @@
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
+import Random from '@/pages/Random';
+import Uid from '@/pages/Uid';
 import { Logo128 } from '@/scripts/JToolsLogo';
 import { useId } from 'react';
 import { HashRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
@@ -9,6 +11,8 @@ import ThemeChanger from './ThemeChanger';
 const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactNode }> = [
     { n: 'Home', u: '/', p: '/', c: <Home /> },
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
+    { n: 'IDGen', u: '/idgen', p: 'idgen', c: <Uid /> },
+    { n: 'Random', u: '/random', p: 'random', c: <Random /> },
 ];
 
 export default function Application() {

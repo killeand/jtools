@@ -1,4 +1,3 @@
-import '@/styles/ImageProc.css';
 import { ChangeEvent, DragEvent, useState } from 'react';
 
 window.addEventListener('dragstart', (e) => e.preventDefault());
@@ -13,17 +12,6 @@ type FileInfo = {
 export default function ImageProc() {
     let [images, setImages] = useState<Array<FileInfo>>([]);
 
-    function HandleFileDrag(e: DragEvent<HTMLDivElement>) {
-        console.log(e.type);
-        if (e.type == 'dragenter' || e.type == 'dragstart') {
-            document.getElementById('file__dragstart')?.classList.remove('hidden');
-            document.getElementById('file__dragstart')?.classList.add('flex');
-        } else {
-            document.getElementById('file__dragstart')?.classList.remove('flex');
-            document.getElementById('file__dragstart')?.classList.add('hidden');
-        }
-    }
-
     function HandleFileUpload(e: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>): void {
         let Files: FileList | null = null;
 
@@ -33,7 +21,6 @@ export default function ImageProc() {
 
         if ((e as DragEvent).dataTransfer) {
             Files = (e as DragEvent).dataTransfer.files;
-            e.currentTarget.classList.toggle('border-gray-700');
         }
 
         if (Files) {
@@ -59,28 +46,30 @@ export default function ImageProc() {
 
     function RenderImageCards() {
         if (images.length == 0) {
-            return <p>No images yet</p>;
+            return <p>No images yet...</p>;
         }
 
         return images.map((FileInfo, index) => {
             return (
-                <div key={`fileinfo${index}`} className='m-2 flex w-1/6 flex-col rounded-md border border-black p-2'>
-                    <div className='flex flex-row items-end justify-evenly'>
-                        <div className='border border-black'>
-                            <img src={FileInfo.url} className='max-lg' />
+                <div key={`fileinfo${index}`} className='card card-compact w-[16rem] h-[11rem] shadow border'>
+                    <div className='card-body'>
+                        <div className='flex flex-row flex-grow items-end justify-evenly border-b pb-2'>
+                            <div className='border'>
+                                <img src={FileInfo.url} className='max-h-[4rem] max-w-[4rem]' />
+                            </div>
+                            <div className='border'>
+                                <img src={FileInfo.url} className='max-h-[3rem] max-w-[3rem]' />
+                            </div>
+                            <div className='border'>
+                                <img src={FileInfo.url} className='max-h-[2rem] max-w-[2rem]' />
+                            </div>
                         </div>
-                        <div className='border border-black'>
-                            <img src={FileInfo.url} className='max-md' />
+                        <div className='flex flex-row self-start items-center justify-center'>Size: {FileInfo.size} bytes</div>
+                        <div className='card-actions'>
+                            <button className='btn btn-sm btn-primary text-primary-content bi-files' onClick={() => navigator.clipboard.writeText(FileInfo.url)}>
+                                Copy
+                            </button>
                         </div>
-                        <div className='border border-black'>
-                            <img src={FileInfo.url} className='max-sm' />
-                        </div>
-                    </div>
-                    <div className='border-t border-black p-2'>
-                        <p>Size: {FileInfo.size} bytes</p>
-                        <button className='btn btn-sm btn-info bi-files' onClick={() => navigator.clipboard.writeText(FileInfo.url)}>
-                            Copy
-                        </button>
                     </div>
                 </div>
             );
@@ -91,13 +80,11 @@ export default function ImageProc() {
         <>
             <h1>Image Processor</h1>
             <p>The image processor allows you to upload an image from your computer, and it will then be converted into a Data URL String.</p>
-            <div className='relative mb-2 flex flex-grow flex-col border-4 border-dashed border-black' onDragEnter={HandleFileDrag} onDragLeave={HandleFileDrag} onDrop={HandleFileUpload}>
-                <div className='flex h-full w-full items-start'>{RenderImageCards()}</div>
-                <div id='file__dragstart' className='absolute left-0 top-0 hidden h-full w-full flex-col items-center justify-center bg-black/50 text-white backdrop-blur-sm'>
-                    Upload?
-                </div>
+            <div className='flex gap-3 mb-3 flex-wrap overflow-y-auto h-[32rem]'>{RenderImageCards()}</div>
+            <div className='mb-2 flex flex-grow flex-col border-4 border-dashed justify-center items-center' onDrop={HandleFileUpload}>
+                Drag and drop files into this area!
             </div>
-            <input type='file' className='file-input file-input-bordered w-full' multiple onChange={HandleFileUpload} />
+            <input type='file' className='file-input file-input-bordered file-input-primary w-full' multiple onChange={HandleFileUpload} />
         </>
     );
 }
