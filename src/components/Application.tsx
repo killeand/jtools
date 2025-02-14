@@ -26,14 +26,14 @@ export default function Application() {
 
     return (
         <HashRouter>
-            <header className='navbar sticky top-0 z-10 bg-primary text-primary-content drop-shadow-md'>
+            <header className='sticky top-0 z-10 navbar bg-primary text-primary-content drop-shadow-md'>
                 <div className='navbar-start w-full gap-2 md:w-1/2'>
                     <nav className='dropdown md:hidden'>
-                        <button tabIndex={0} role='button' className='bi-list btn btn-ghost btn-sm px-1 text-3xl md:hidden' />
-                        <ul tabIndex={0} className='menu dropdown-content menu-sm z-20 rounded-bl-box rounded-tr-box border border-primary bg-base-100 text-base-content shadow'>
+                        <button tabIndex={0} role='button' className='bi-list btn px-1 text-3xl btn-sm btn-ghost md:hidden' />
+                        <ul tabIndex={0} className='dropdown-content menu z-20 menu-sm rounded-tr-box rounded-bl-box border border-primary bg-base-100 text-base-content shadow'>
                             {ProjectStructure.map((item) => (
                                 <li key={ddMenuId + item.n}>
-                                    <Link to={item.u} className='font-bold text-lg'>
+                                    <Link to={item.u} className='text-lg font-bold'>
                                         {item.n}
                                     </Link>
                                 </li>
@@ -46,10 +46,10 @@ export default function Application() {
                     </Link>
                 </div>
                 <nav className='navbar-center hidden md:flex'>
-                    <ul tabIndex={0} className='menu menu-horizontal menu-sm z-20 m-0'>
+                    <ul tabIndex={0} className='menu menu-horizontal z-20 m-0 menu-sm'>
                         {ProjectStructure.map((item) => (
                             <li key={pMenuId + item.n}>
-                                <Link to={item.u} className='font-bold text-lg uppercase'>
+                                <Link to={item.u} className='text-lg font-bold uppercase'>
                                     {item.n}
                                 </Link>
                             </li>
@@ -60,7 +60,7 @@ export default function Application() {
                     <ThemeChanger />
                 </div>
             </header>
-            <main className='flex flex-grow flex-col p-1 md:p-2 relative'>
+            <main className='relative flex flex-grow flex-col p-1 md:p-2'>
                 <Routes>
                     {ProjectStructure.map((item) => (
                         <Route key={routeId + item.n} path={item.p} element={item.c} />

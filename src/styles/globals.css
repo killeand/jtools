@@ -1,8 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/*########## MAIN TAG CHANGES ##########*/
+@import 'tailwindcss';
+@plugin 'daisyui';
+@import './typography.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 * {
     @apply box-border;
