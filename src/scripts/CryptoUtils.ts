@@ -6,11 +6,19 @@ export function GenerateBytes(length: number): Uint8Array {
     return NewArray;
 }
 
-export async function Hash(secretKey: string, value: string): Promise<Uint8Array> {
-    if (secretKey.length == 0 || value.length == 0) return Promise.reject('The secretKey and/or value must not be empty');
+export async function Hash(secretKey: string | Uint8Array, value: string): Promise<Uint8Array> {
+    if (secretKey.length == 0 || value.length == 0) return Promise.reject('The secretKeyBuffer and/or value must not be empty');
 
-    const keyBuffer = await crypto.subtle.importKey('raw', StringToBuffer(secretKey), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const keyBuffer = await crypto.subtle.importKey('raw', secretKey instanceof Uint8Array ? secretKey : StringToBuffer(secretKey), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
     const hashBuffer = await crypto.subtle.sign('HMAC', keyBuffer, StringToBuffer(value));
+
+    return new Uint8Array(hashBuffer);
+}
+
+export async function Digest(value: string, algorithm: '1' | '256' | '384' | '512' = '512'): Promise<Uint8Array> {
+    if (value.length == 0) return Promise.reject('The value must not be empty');
+
+    const hashBuffer = await crypto.subtle.digest(`SHA-${algorithm}`, StringToBuffer(value));
 
     return new Uint8Array(hashBuffer);
 }

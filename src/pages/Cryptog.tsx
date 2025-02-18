@@ -1,92 +1,43 @@
-import { GenerateBytes, Hash } from '@/scripts/CryptoUtils';
-import { BufferToString, StringToBuffer } from '@/scripts/StringUtils';
+import CryptoTabHash from '@/components/CryptoTabHash';
+import CryptoTabRandom from '@/components/CryptoTabRandom';
+import { Base64ToBuffer } from '@/scripts/StringUtils';
 import { ReactNode, useState } from 'react';
-import { BufferToBase64, StringToBase64 } from '../scripts/StringUtils';
+import { BufferToBase64 } from '../scripts/StringUtils';
 
 export default function Cryptog() {
     const [cryptids, setCryptids] = useState<Array<{ k: string; v: string; o?: string | ReactNode }>>([]);
-    const [secret, setSecret] = useState<string>('');
-    const [value, setValue] = useState<string>('');
-    const [delimiter, setDelimiter] = useState<string>('|');
-    const [encoding, setEncoding] = useState<boolean>(false);
-    const [hashkey, setHashkey] = useState<boolean>(false);
 
     return (
         <>
             <div className='flex grow flex-col gap-2 divide-primary md:flex-row'>
                 <div className='tabs tabs-box md:w-1/2'>
                     <input type='radio' name='crypto-selection' className='tab' aria-label='Random' defaultChecked />
-                    <div className='tab-content border-base-300 bg-base-100 p-2'>
-                        <p>Generates a cryptographically random value and outputs as a base64 string.</p>
-                        <div className='flex flex-col gap-2 [&_button]:btn [&_button]:w-full [&_button]:btn-sm [&_button]:btn-primary'>
-                            <button onClick={() => setCryptids([...cryptids, { k: '128-bit Value', v: BufferToBase64(GenerateBytes(16)) }])}>128-bit Value</button>
-                            <button onClick={() => setCryptids([...cryptids, { k: '192-bit Value', v: BufferToBase64(GenerateBytes(24)) }])}>192-bit Value</button>
-                            <button onClick={() => setCryptids([...cryptids, { k: '256-bit Value', v: BufferToBase64(GenerateBytes(32)) }])}>256-bit Value</button>
-                            <button onClick={() => setCryptids([...cryptids, { k: '512-bit Value', v: BufferToBase64(GenerateBytes(64)) }])}>512-bit Value</button>
-                        </div>
-                    </div>
+                    <CryptoTabRandom cryptedSetter={(key, value) => setCryptids([...cryptids, { k: key, v: value }])} />
                     <input type='radio' name='crypto-selection' className='tab' aria-label='Hash' />
-                    <div className='tab-content border-base-300 bg-base-100 p-2'>
-                        <div className='flex flex-col gap-2'>
-                            <label className='input-bordered input w-full input-primary'>
-                                Secret Key
-                                <input type='text' placeholder='Please enter your secret key...' value={secret} onChange={(e) => setSecret(e.target.value)} />
-                            </label>
-                            <label className='input-bordered input w-full input-primary'>
-                                Value
-                                <input type='text' placeholder='Please enter your value to hash...' value={value} onChange={(e) => setValue(e.target.value)} />
-                            </label>
-                            <label className='label'>
-                                <input type='checkbox' className='toggle toggle-primary' checked={encoding} onChange={(e) => setEncoding(e.target.checked)} />
-                                URL Encoding
-                            </label>
-                            <button
-                                className='btn btn-primary'
-                                onClick={() =>
-                                    Hash(secret, value)
-                                        .then((retval) =>
-                                            setCryptids([
-                                                ...cryptids,
-                                                {
-                                                    k: 'Hash',
-                                                    v: StringToBase64(BufferToString(retval)),
-                                                    o: (
-                                                        <div className='flex flex-col'>
-                                                            <div className='break-words'>
-                                                                <span className='font-bold'>Key:</span> {secret}
-                                                            </div>
-                                                            <div className='break-words'>
-                                                                <span className='font-bold'>Value:</span> {value}
-                                                            </div>
-                                                            <div className='break-words'>
-                                                                <span className='font-bold'>Result:</span> {StringToBase64(BufferToString(retval))}
-                                                            </div>
-                                                        </div>
-                                                    ),
-                                                },
-                                            ])
-                                        )
-                                        .catch((error: string) =>
-                                            setCryptids([
-                                                ...cryptids,
-                                                {
-                                                    k: 'Hash',
-                                                    v: '',
-                                                    o: (
-                                                        <div className='flex flex-col'>
-                                                            <div className='break-words'>
-                                                                <span className='font-bold'>Error:</span> {error}
-                                                            </div>
-                                                        </div>
-                                                    ),
-                                                },
-                                            ])
-                                        )
-                                }>
-                                Generate Hash
-                            </button>
-                        </div>
-                    </div>
+                    <CryptoTabHash
+                        cryptedSetter={(secret, value, encrypted) =>
+                            setCryptids([
+                                ...cryptids,
+                                {
+                                    k: 'Hash',
+                                    v: value,
+                                    o: (
+                                        <div className='flex flex-col'>
+                                            <div className='break-words'>
+                                                <span className='font-bold'>Secret:</span> {secret}
+                                            </div>
+                                            <div className='break-words'>
+                                                <span className='font-bold'>Value:</span> {value}
+                                            </div>
+                                            <div className='break-words'>
+                                                <span className='font-bold'>Result:</span> {encrypted}
+                                            </div>
+                                        </div>
+                                    ),
+                                },
+                            ])
+                        }
+                    />
                     {/* <input type='radio' name='crypto-selection' className='tab' aria-label='Encrypt' />
                     <div className='tab-content border-base-300 bg-base-100 p-2'>
                         <div className='flex flex-col gap-2'>
@@ -250,7 +201,23 @@ export default function Cryptog() {
                         <button
                             className='btn w-full btn-sm btn-error'
                             onClick={() => {
-                                console.log(StringToBuffer('Test'));
+                                let testray = [];
+                                for (let i = 0; i < 256; i++) testray.push(i);
+                                const newray: Uint8Array = new Uint8Array(testray);
+
+                                const native_encode = btoa(String.fromCharCode(...newray));
+                                const mine_encode = BufferToBase64(newray);
+
+                                console.log(native_encode, mine_encode, native_encode === mine_encode);
+
+                                const native_decode = new Uint8Array([...atob(mine_encode)].map((c) => c.charCodeAt(0)));
+                                const mine_decode = Base64ToBuffer(native_encode);
+
+                                console.log(native_decode, mine_decode);
+                                newray.forEach((v, i) => {
+                                    if (v !== native_decode[i]) console.log('Native wrong');
+                                    if (v !== mine_decode[i]) console.log('Mine wrong');
+                                });
                             }}>
                             Test
                         </button>
