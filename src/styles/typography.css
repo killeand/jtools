@@ -46,27 +46,27 @@ ol {
     @apply ml-3;
 }
 
-ul>li {
+ul > li {
     @apply list-inside list-disc;
 }
 
-ol>li {
+ol > li {
     @apply list-inside list-decimal;
 }
 
 code {
-    @apply mockup-code mx-auto w-full bg-base-300 text-base-content md:w-3/4;
+    @apply mockup-code w-full bg-base-300 text-base-content;
 }
 
 fieldset {
-    @apply mx-auto flex w-full flex-col space-y-2 border border-secondary px-3 pb-3 md:w-3/4;
+    @apply flex w-full flex-col space-y-2 border border-secondary px-3 pb-3;
 }
 
-fieldset>legend {
+fieldset > legend {
     @apply border border-primary px-3 font-bold;
 }
 
-fieldset>* {
+fieldset > * {
     @apply mb-0;
 }
 
@@ -74,19 +74,19 @@ blockquote {
     @apply mx-auto w-full md:w-3/4;
 }
 
-blockquote>p {
+blockquote > p {
     @apply m-0 bg-base-200 px-3 pb-3 indent-10 text-base-content;
 }
 
-blockquote>p:first-of-type {
+blockquote > p:first-of-type {
     @apply rounded-t-md pt-3;
 }
 
-blockquote>p:last-of-type {
+blockquote > p:last-of-type {
     @apply rounded-b-md;
 }
 
-blockquote>cite {
+blockquote > cite {
     @apply ml-5 font-bold italic;
 }
 

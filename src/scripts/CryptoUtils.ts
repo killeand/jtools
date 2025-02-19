@@ -15,8 +15,9 @@ export async function Hash(secretKey: string | Uint8Array, value: string): Promi
     return new Uint8Array(hashBuffer);
 }
 
-export async function Digest(value: string, algorithm: '1' | '256' | '384' | '512' = '512'): Promise<Uint8Array> {
+export async function Digest(value: string, algorithm: string = '512'): Promise<Uint8Array> {
     if (value.length == 0) return Promise.reject('The value must not be empty');
+    if (!['1', '256', '384', '512'].includes(algorithm)) return Promise.reject('The algorithm must be either 1, 256, 384, or 512');
 
     const hashBuffer = await crypto.subtle.digest(`SHA-${algorithm}`, StringToBuffer(value));
 

@@ -3,6 +3,7 @@ import Faker from '@/pages/Faker';
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
+import Jwt from '@/pages/Jwt';
 import Random from '@/pages/Random';
 import Uid from '@/pages/Uid';
 import { Logo128 } from '@/scripts/JToolsLogo';
@@ -13,10 +14,11 @@ import ThemeChanger from './ThemeChanger';
 const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactNode }> = [
     { n: 'Home', u: '/', p: '/', c: <Home /> },
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
-    { n: 'IDGen', u: '/idgen', p: 'idgen', c: <Uid /> },
+    { n: 'UID', u: '/uid', p: 'uid', c: <Uid /> },
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
     { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
     { n: 'Crypto', u: '/crypto', p: 'crypto', c: <Cryptog /> },
+    { n: 'JWT', u: '/jwt', p: 'jwt', c: <Jwt /> },
 ];
 
 export default function Application() {

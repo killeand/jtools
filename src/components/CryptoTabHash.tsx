@@ -27,20 +27,20 @@ export default function CryptoTabHash({ cryptedSetter }: { cryptedSetter: (secre
             <p>Generates a hash of a value using the Hash-Based Message Authentication Code (HMAC) algorithm. This will allow for a predictable hash result based on the secret key provided.</p>
             <div className='flex flex-col gap-2'>
                 <label className='input-bordered input w-full input-primary'>
-                    Secret Key
+                    <div className='label'>Secret Key</div>
                     <input type='text' placeholder='Please enter your secret key...' value={secret} onChange={(e) => setSecret(e.target.value)} />
                 </label>
                 <label className='label'>
                     <input type='checkbox' className='toggle toggle-primary' checked={base64Key} onChange={(e) => setBase64Key(e.target.checked)} />
-                    Current: {base64Key ? 'Base64 Encoded Key' : 'Passphrase Text'}
+                    <div className='label'>Current: {base64Key ? 'Base64 Encoded Key' : 'Passphrase Text'}</div>
                 </label>
                 <label className='input-bordered input w-full input-primary'>
-                    Value
+                    <div className='label'>Value</div>
                     <input type='text' placeholder='Please enter your value to hash...' value={value} onChange={(e) => setValue(e.target.value)} />
                 </label>
                 <label className='label'>
                     <input type='checkbox' className='toggle toggle-primary' checked={encoding} onChange={(e) => setEncoding(e.target.checked)} />
-                    URL Encoding
+                    <div className='label'>URL Encoding</div>
                 </label>
                 <button className='btn btn-primary' onClick={HandleGenerateClick}>
                     Generate Hash
