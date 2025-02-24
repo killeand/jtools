@@ -5,6 +5,7 @@ import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
 import Jwt from '@/pages/Jwt';
 import Random from '@/pages/Random';
+import SVGResizer from '@/pages/SVGResizer';
 import Uid from '@/pages/Uid';
 import { Logo128 } from '@/scripts/JToolsLogo';
 import { useId } from 'react';
@@ -14,6 +15,7 @@ import ThemeChanger from './ThemeChanger';
 const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactNode }> = [
     { n: 'Home', u: '/', p: '/', c: <Home /> },
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
+    { n: 'SVGResizer', u: '/svgresizer', p: 'svgresizer', c: <SVGResizer /> },
     { n: 'UID', u: '/uid', p: 'uid', c: <Uid /> },
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
     { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
