@@ -7,10 +7,11 @@ export default function CryptoTabHash({ cryptedSetter }: { cryptedSetter: (secre
     const [base64Key, setBase64Key] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
     const [encoding, setEncoding] = useState<boolean>(false);
+    const [algorithm, setAlgorithm] = useState<string>('256');
 
     function HandleGenerateClick() {
         try {
-            Hash(base64Key ? Base64ToBuffer(secret) : secret, value)
+            Hash(base64Key ? Base64ToBuffer(secret) : secret, value, algorithm)
                 .then((resultBuffer: Uint8Array) => {
                     cryptedSetter(secret, value, BufferToBase64(resultBuffer, encoding));
                 })
@@ -33,6 +34,14 @@ export default function CryptoTabHash({ cryptedSetter }: { cryptedSetter: (secre
                 <label className='label'>
                     <input type='checkbox' className='toggle toggle-primary' checked={base64Key} onChange={(e) => setBase64Key(e.target.checked)} />
                     <div className='label'>Current: {base64Key ? 'Base64 Encoded Key' : 'Passphrase Text'}</div>
+                </label>
+                <label className='select w-full select-primary'>
+                    <div className='label'>Algorithm</div>
+                    <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
+                        <option value='256'>SHA-256</option>
+                        <option value='384'>SHA-384</option>
+                        <option value='512'>SHA-512</option>
+                    </select>
                 </label>
                 <label className='input-bordered input w-full input-primary'>
                     <div className='label'>Value</div>

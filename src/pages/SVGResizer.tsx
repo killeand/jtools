@@ -20,6 +20,8 @@ export default function SVGResizer() {
                 if (ctx) {
                     cnv.height = newHeight;
                     cnv.width = newWidth;
+                    ctx.fillStyle = 'rgba(255,255,255,1)';
+                    ctx.fillRect(0, 0, cnv.width, cnv.height);
                     ctx.drawImage(img, 0, 0, cnv.width, cnv.height);
 
                     setImageOutput(cnv.toDataURL(type ?? outputType, 1));
@@ -104,7 +106,7 @@ export default function SVGResizer() {
             <p>The SVG Resizer allows you to load an svg image, manipulate its dimensions, and finally download it as a PNG, JPEG, or WEBP file.</p>
             <div className='flex grow flex-col items-center justify-center'>
                 {imageOutput == null && 'No Image Loaded'}
-                {imageOutput != null && <img src={imageOutput} className='border-4 border-primary align-middle' />}
+                {imageOutput != null && <img src={imageOutput} className='border-4 border-primary/20 align-middle' />}
             </div>
             <div className='sticky bottom-0 flex flex-col gap-2 bg-base-100/50 backdrop-blur-sm'>
                 <div className='flex flex-col gap-2'>

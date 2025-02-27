@@ -1,82 +1,99 @@
-import { Digest, Hash } from '@/scripts/CryptoUtils';
-import { Base64ToString, BufferToBase64 } from '@/scripts/StringUtils';
+import { StringToBuffer } from '@/scripts/StringUtils';
+import { JWTHeaderSchema } from '@/scripts/ZodJwt';
+import { decodeJwt, decodeProtectedHeader, JWTPayload, jwtVerify, ProtectedHeaderParameters } from 'jose';
 import { useState } from 'react';
 
 export default function Jwt() {
     const [encoded, setEncoded] = useState<string>('');
     const [header, setHeader] = useState<string>('');
     const [payload, setPayload] = useState<string>('');
-    const [algorithm, setAlgorithm] = useState<string>('256');
+    const [algorithm, setAlgorithm] = useState<string>('HS256');
     const [secret, setSecret] = useState<string>('');
     const [valid, setValid] = useState<boolean>(true);
     const [ev, setEV] = useState<boolean>(true);
     const [hv, setHV] = useState<boolean>(true);
     const [pv, setPV] = useState<boolean>(true);
 
-    async function HandleEncodedChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-        setEncoded(e.target.value);
+    function ResetFields(valid: boolean, ignore?: { h?: boolean; p?: boolean; e?: boolean }) {
+        setEV(valid);
+        setHV(valid);
+        setPV(valid);
+        setValid(valid);
+        if (!ignore || (ignore && !ignore.h)) setHeader('');
+        if (!ignore || (ignore && !ignore.p)) setPayload('');
+        if (!ignore || (ignore && !ignore.e)) setEncoded('');
+    }
 
-        if (e.target.value === '') {
-            setEV(true);
-            setHV(true);
-            setPV(true);
-            setValid(true);
-            setHeader('');
-            setPayload('');
+    async function HandleEncodedChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+        const v = e.target.value;
+        setEncoded(v);
+
+        if (v === '') {
+            ResetFields(true, { e: true });
             return;
-        } else if (!e.target.value.match(/^[\w\-]+\.[\w\-]+\.[\w\-]+$/gm)) {
-            setEV(false);
-            setHV(false);
-            setPV(false);
-            setValid(false);
-            setHeader('');
-            setPayload('');
+        } else if (!v.match(/^[\w\-]+\.[\w\-]+\.[\w\-]+$/gm)) {
+            ResetFields(false, { e: true });
             return;
         } else {
             setEV(true);
         }
 
-        const split = e.target.value.split('.');
-        let HeaderObj: { alg: 'HS256' | 'HS384' | 'HS512'; type: 'JWT'; [key: string]: string } | null = null;
+        let header: ProtectedHeaderParameters | null = null;
+        let payload: JWTPayload | null = null;
+        let verify = false;
 
         try {
-            HeaderObj = JSON.parse(Base64ToString(split[0], true));
-            setHeader(JSON.stringify(HeaderObj, null, '\t'));
+            header = decodeProtectedHeader(e.target.value);
+            payload = decodeJwt(e.target.value);
+        } catch {
+            ResetFields(false, { e: true });
+            return;
+        }
+
+        try {
+            await jwtVerify(e.target.value, StringToBuffer(secret));
+            verify = true;
+        } catch {
+            verify = false;
+        }
+
+        if (header) {
+            setHeader(JSON.stringify(header, null, '\t'));
             setHV(true);
-            setAlgorithm(HeaderObj?.alg.substring(2) ?? '256');
-        } catch {
-            setHeader('Invalid Base64 Encoded JSON');
+            setAlgorithm(header.alg ?? 'HS256');
+        } else {
+            setHeader('');
             setHV(false);
-            setValid(false);
-            return;
         }
 
-        try {
-            setPayload(JSON.stringify(JSON.parse(Base64ToString(split[1], true)), null, '\t'));
+        if (payload) {
+            setPayload(JSON.stringify(payload, null, '\t'));
             setPV(true);
-        } catch {
-            setPayload('Invalid Base64 Encoded JSON');
+        } else {
+            setPayload('');
             setPV(false);
-            setValid(false);
+        }
+
+        setValid(verify);
+    }
+
+    async function HandleHeaderChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+        const v = e.target.value;
+
+        if (v === '') {
+            ResetFields(true, { h: true });
             return;
         }
 
-        try {
-            const SHA = await Digest(secret, HeaderObj?.alg.substring(2) ?? '256');
-            const Sig = await Hash(SHA, `${split[0]}.${split[1]}`);
-            const SigEnc = BufferToBase64(Sig, true);
+        let header: ProtectedHeaderParameters | null = null;
 
-            if (SigEnc === split[2]) {
-                setValid(true);
-                console.log('Match');
-            } else {
-                setValid(false);
-                console.log('Not Match');
+        try {
+            header = JSON.parse(v);
+
+            if (JWTHeaderSchema.safeParse(header).success) {
+                setHV(true);
             }
-        } catch {
-            setValid(false);
-            console.log('Could not validate sig');
-        }
+        } catch {}
     }
 
     return (
@@ -110,9 +127,9 @@ export default function Jwt() {
                             <label className='select select-primary md:w-5/12'>
                                 <div className='label'>Algorithm</div>
                                 <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
-                                    <option value='256'>HMAC-SHA256</option>
-                                    <option value='384'>HMAC-SHA384</option>
-                                    <option value='512'>HMAC-SHA512</option>
+                                    <option value='HS256'>HMAC-SHA256</option>
+                                    <option value='HS384'>HMAC-SHA384</option>
+                                    <option value='HS512'>HMAC-SHA512</option>
                                 </select>
                             </label>
                             <label className='input-bordered input input-primary md:w-3/6'>
