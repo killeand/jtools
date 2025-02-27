@@ -13,7 +13,7 @@ export default function SVGResizer() {
         if (imageData || blobdata) {
             const dataurl = URL.createObjectURL((blobdata as Blob) ?? imageData);
             const img = new Image();
-            img.addEventListener('load', (e) => {
+            img.addEventListener('load', () => {
                 const cnv = document.createElement('canvas');
                 const ctx = cnv.getContext('2d');
 

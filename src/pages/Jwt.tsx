@@ -79,6 +79,7 @@ export default function Jwt() {
 
     async function HandleHeaderChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         const v = e.target.value;
+        setHeader(v);
 
         if (v === '') {
             ResetFields(true, { h: true });
@@ -92,8 +93,12 @@ export default function Jwt() {
 
             if (JWTHeaderSchema.safeParse(header).success) {
                 setHV(true);
+            } else {
+                setHV(false);
             }
-        } catch {}
+        } catch {
+            setHV(false);
+        }
     }
 
     return (
@@ -115,7 +120,7 @@ export default function Jwt() {
                     <h2>Decoded</h2>
                     <fieldset>
                         <legend>Header</legend>
-                        <textarea value={header} onChange={(e) => setHeader(e.target.value)} placeholder='Decoded Header Here' className={`textarea h-full w-full textarea-primary ${hv ? 'bg-base-100' : 'bg-error text-error-content'}`}></textarea>
+                        <textarea value={header} onChange={HandleHeaderChange} placeholder='Decoded Header Here' className={`textarea h-full w-full textarea-primary ${hv ? 'bg-base-100' : 'bg-error text-error-content'}`}></textarea>
                     </fieldset>
                     <fieldset>
                         <legend>Payload</legend>

@@ -21,7 +21,7 @@ export function Base64ToString(inputValue: string, urlDecode: boolean = false): 
 export function StringToBuffer(inputValue: string): Uint8Array {
     const retval = new Uint8Array(inputValue.length);
 
-    return retval.map((item, i) => inputValue.charCodeAt(i));
+    return retval.map((_item, i) => inputValue.charCodeAt(i));
 }
 
 export function BufferToString(inputValue: Uint8Array): string;

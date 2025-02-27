@@ -3,7 +3,6 @@ import Faker from '@/pages/Faker';
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
-import Jwt from '@/pages/Jwt';
 import Random from '@/pages/Random';
 import SVGResizer from '@/pages/SVGResizer';
 import Uid from '@/pages/Uid';
@@ -20,7 +19,6 @@ const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactN
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
     { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
     { n: 'Crypto', u: '/crypto', p: 'crypto', c: <Cryptog /> },
-    { n: 'JWT', u: '/jwt', p: 'jwt', c: <Jwt /> },
 ];
 
 export default function Application() {
