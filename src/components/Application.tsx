@@ -3,6 +3,7 @@ import Faker from '@/pages/Faker';
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
+import JsonUtil from '@/pages/JsonUtil';
 import Random from '@/pages/Random';
 import SVGResizer from '@/pages/SVGResizer';
 import Uid from '@/pages/Uid';
@@ -16,6 +17,7 @@ const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactN
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
     { n: 'SVGResizer', u: '/svgresizer', p: 'svgresizer', c: <SVGResizer /> },
     { n: 'UID', u: '/uid', p: 'uid', c: <Uid /> },
+    { n: 'JSON', u: '/json', p: 'json', c: <JsonUtil /> },
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
     { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
     { n: 'Crypto', u: '/crypto', p: 'crypto', c: <Cryptog /> },
@@ -31,7 +33,7 @@ export default function Application() {
             <header className='sticky top-0 z-10 navbar bg-primary text-primary-content drop-shadow-md'>
                 <div className='navbar-start w-full gap-2 md:w-1/2'>
                     <nav className='dropdown md:hidden'>
-                        <button tabIndex={0} role='button' className='bi-list btn px-1 text-3xl btn-sm btn-ghost md:hidden' />
+                        <button tabIndex={0} role='button' className='bi-list btn px-1 text-3xl btn-ghost btn-sm md:hidden' />
                         <ul tabIndex={0} className='dropdown-content menu z-20 menu-sm rounded-tr-box rounded-bl-box border border-primary bg-base-100 text-base-content shadow'>
                             {ProjectStructure.map((item) => (
                                 <li key={ddMenuId + item.n}>
