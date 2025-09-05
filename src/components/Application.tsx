@@ -3,7 +3,6 @@ import Faker from '@/pages/Faker';
 import Fourohfour from '@/pages/Fourohfour';
 import Home from '@/pages/Home';
 import ImageProc from '@/pages/ImageProc';
-import JsonUtil from '@/pages/JsonUtil';
 import Random from '@/pages/Random';
 import SVGResizer from '@/pages/SVGResizer';
 import Uid from '@/pages/Uid';
@@ -17,7 +16,6 @@ const ProjectStructure: Array<{ n: string; u: string; p: string; c: React.ReactN
     { n: 'ImageProc', u: '/imageproc', p: 'imageproc', c: <ImageProc /> },
     { n: 'SVGResizer', u: '/svgresizer', p: 'svgresizer', c: <SVGResizer /> },
     { n: 'UID', u: '/uid', p: 'uid', c: <Uid /> },
-    { n: 'JSON', u: '/json', p: 'json', c: <JsonUtil /> },
     { n: 'Random', u: '/random', p: 'random', c: <Random /> },
     { n: 'Faker', u: '/faker', p: 'faker', c: <Faker /> },
     { n: 'Crypto', u: '/crypto', p: 'crypto', c: <Cryptog /> },
